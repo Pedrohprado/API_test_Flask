@@ -1,4 +1,4 @@
-from flask import Flask, make_response, jsonify, request
+from flask import Flask, make_response, jsonify, request, render_template
 import mysql.connector as mysql
 
 
@@ -13,9 +13,13 @@ mydb = mysql.connect(
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
+@app.route('/teste')
+def getTemplate():
+    return render_template('index.html')
 
-@app.route('/carros', methods=['GET'])
-def getCarros():
+
+@app.route('/funcionarios', methods=['GET'])
+def getFuncionarios():
     mycursor = mydb.cursor()
     mycursor.execute('SELECT * FROM Olimpiada')
     olimpiadaGeral = mycursor.fetchall()
@@ -39,8 +43,8 @@ def getCarros():
     )
 
 
-@app.route('/carros', methods=['POST'])
-def createCarros():
+@app.route('/funcionarios', methods=['POST'])
+def createFuncionarios():
     funcionaro = request.json
 
     mycursor = mydb.cursor()
@@ -58,8 +62,8 @@ def createCarros():
     )
 
 
-@app.route('/carros', methods=['DELETE'])
-def deleteCarros():
+@app.route('/remove', methods=['DELETE'])
+def removeFuncionario():
     funcionario = request.json
 
     mycursor = mydb.cursor()
@@ -73,4 +77,5 @@ def deleteCarros():
     mydb.commit()
     print("Linha deletada com sucesso!")
 
-app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
