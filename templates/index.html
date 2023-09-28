@@ -1,12 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/calculate.css">
+    <title>Calculadora</title>
 </head>
+
 <body>
-    <h2>Calculadora Olimpiada de Solda 2023</h2>
-    <h3>teste</h3>
+    <header>
+        <p>Olimpíada de Soldagem - 2023</p>
+        <div class="navBar">
+            <button>Calculadora</button>
+            <button>Levantamento</button>
+            <br>
+            <br>
+            <br>
+
+        </div>
+    </header>
+    <main>
+        <div class="calculateNotes">
+
+        </div>
+        <div class="registerCalc">
+            <form action="/calculate" id="calculate" method="post">
+                <label for="name">nome:</label>
+                <input type="text" name="name" id="name" placeholder="coloque o nome do colaborador" required>
+                <label for="cartao">cartão:</label>
+                <input type="text" name="cartao" id="cartao" placeholder="coloque o numero de cartão do funcionário"
+                    required>
+                <label for="lider">lider:</label>
+                <input type="text" name="lider" id="lider" placeholder="coloque o nome do lider" required>
+                <label for="empresa">Empresa:</label>
+                <input type="text" name="empresa" id="empresa" placeholder="Pedertractor ou Tractor" required>
+                <label for="nota">Nota:</label>
+                <input type="text" name="nota" id="nota" placeholder="coloque a nota do funcionário" required>
+                <button type="submit" id="buttonCalc">enviar</button>
+            </form>
+        </div>
+
+        <div class="rankingAnalitcs">
+
+        </div>
+    </main>
+    <footer>
+
+    </footer>
 </body>
+
 </html>
