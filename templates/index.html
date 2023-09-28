@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/calculate.css">
     <title>Calculadora</title>
 </head>
@@ -14,35 +17,70 @@
         <div class="navBar">
             <button>Calculadora</button>
             <button>Levantamento</button>
-            <br>
-            <br>
-            <br>
-
         </div>
     </header>
     <main>
         <div class="calculateNotes">
-
+            <h3>Calculadora</h3>
+            <form action="/calculadora" method="post" class="calcDis">
+                <label for="firstQuest1">Questões 1 até 20</label>
+                <input type="number" name="firstQuest1" id="firstQuest1" placeholder="Cada questão tem o valor de 0.5" required>
+                <label for="secondQuest2">Questões 21 até 30</label>
+                <input type="number" name="secondQuest2" id="secondQuest2" placeholder="Cada questão tem o valor de 1" required>
+                <label for="therdQuest3">Questões 31 até 36</label>
+                <input type="number" name="therdQuest3" id="therdQuest3" placeholder="Cada questão tem o valor de 1.5" required>
+                <label for="fortQuest4">Questões 37 até 40</label>
+                <input type="number" name="fortQuest4" id="fortQuest4" placeholder="Cada questão tem o valor de 2.75" required>
+                <button type="submit">calcular</button>
+            </form>
+            <div class="resulty">
+                {{total}}
+            </div>
         </div>
         <div class="registerCalc">
-            <form action="/calculate" id="calculate" method="post">
-                <label for="name">nome:</label>
+            <h3>Registre o funcionário</h3>
+            <form action="/register" id="calculate" method="post" class="registerss">
+                <label for="name">Nome</label>
                 <input type="text" name="name" id="name" placeholder="coloque o nome do colaborador" required>
-                <label for="cartao">cartão:</label>
+                <label for="cartao">Cartão</label>
                 <input type="text" name="cartao" id="cartao" placeholder="coloque o numero de cartão do funcionário"
                     required>
-                <label for="lider">lider:</label>
+                <label for="lider">Lider</label>
                 <input type="text" name="lider" id="lider" placeholder="coloque o nome do lider" required>
-                <label for="empresa">Empresa:</label>
+                <label for="empresa">Empresa</label>
                 <input type="text" name="empresa" id="empresa" placeholder="Pedertractor ou Tractor" required>
-                <label for="nota">Nota:</label>
+                <label for="nota">Nota</label>
                 <input type="text" name="nota" id="nota" placeholder="coloque a nota do funcionário" required>
                 <button type="submit" id="buttonCalc">enviar</button>
             </form>
         </div>
 
+        <div class="removeFunci">
+            <form action="/remove" method="post">
+                <label for="deleta">Deletar dados:</label>
+                <input type="text" name="deleta" id="deleta"  placeholder="Digite o cartão a ser deletado">
+                <button type="submit" id="buttonDelete">deletar</button>
+            </form>
+        </div>
         <div class="rankingAnalitcs">
-
+            <table>
+                <tr>
+                    <th>Cartão</th>
+                    <th>Nome</th>
+                    <th>Lider</th>
+                    <th>Empresa</th>
+                    <th>Nota</th>
+                </tr>
+                {% for c in funcionarios%}
+                <tr>
+                    <td>{{c['cartao']}}</td>
+                    <td>{{c['name']}}</td>
+                    <td>{{c['lider']}}</td>
+                    <td>{{c['empresa']}}</td>
+                    <td>{{c['nota']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
     </main>
     <footer>

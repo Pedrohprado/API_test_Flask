@@ -1,5 +1,6 @@
 from flask import Flask, make_response, jsonify, request, render_template, flash, redirect
 import mysql.connector as mysql
+import json
 
 mydb = mysql.connect(
     host="localhost",
@@ -18,7 +19,21 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/calculate', methods=['POST'])
+@app.route('/calculadora', methods=['POST'])
+def calculadora():
+    primeiroValor = int(request.form.get('firstQuest1'))
+    segundoValor = int(request.form.get('secondQuest2'))
+    terceiroValor = int(request.form.get('therdQuest3'))
+    quartoValor = int(request.form.get('fortQuest4'))
+
+    print(type(primeiroValor))
+
+    total = (primeiroValor * 0.5) + (segundoValor * 1) + \
+        (terceiroValor * 1.5) + (quartoValor * 2.75)
+    return render_template('index.html', total=total)
+
+
+@app.route('/register', methods=['POST'])
 def sendInfoFuncionario():
     nome = request.form.get('name')
     card = request.form.get('cartao')
@@ -35,13 +50,13 @@ def sendInfoFuncionario():
         mycursor.execute(sql)
 
         mydb.commit()
-        return redirect('/')
+        return redirect('/funcionarios')
 
 
 @app.route('/funcionarios', methods=['GET'])
 def getFuncionarios():
     mycursor = mydb.cursor()
-    mycursor.execute('SELECT * FROM Olimpiada')
+    mycursor.execute('SELECT * FROM Olimpiada ORDER BY nota DESC')
     olimpiadaGeral = mycursor.fetchall()
 
     funcionarios = list()
@@ -56,47 +71,45 @@ def getFuncionarios():
             }
         )
 
-    return make_response(
-        jsonify(
-            mesage='Lista Olimpiada 2023',
-            data=funcionarios
-        )
-    )
+    return render_template('index.html', funcionarios=funcionarios)
 
+
+@app.route('/remove', methods=['POST'])
+def remove():
+    funcionario = request.form.get('deleta')
+    print(funcionario)
+
+    mycursor = mydb.cursor()
+    verif = f"SELECT * FROM Olimpiada WHERE cartao = {funcionario}"
+
+    mycursor.execute(verif)
+    result = mycursor.fetchone()
+    print(result)
+    if result:
+        mycursor.execute(
+            "DELETE FROM Olimpiada WHERE cartao = %s", [funcionario])
+        mydb.commit()
+        return redirect('/funcionarios')
+    else:
+        return print("numero de cartão não encontrado")
 
 # @app.route('/funcionarios', methods=['POST'])
 # def createFuncionarios():
-#     funcionaro = request.json
-
-#     mycursor = mydb.cursor()
-
-#     sql = f"INSERT INTO Olimpiada (cartao,name,Lider,Empresa) VALUES({funcionaro['cartao']},'{funcionaro['name']}','{funcionaro['lider']}','{funcionaro['empresa']}');"
-#     mycursor.execute(sql)
-
-#     mydb.commit()
-
-#     return make_response(
-#         jsonify(
-#             masage='Funcionario cadastrado',
-#             operator=funcionaro
-#         )
-#     )
-
-
-@app.route('/remove', methods=['DELETE'])
-def removeFuncionario():
-    funcionario = request.json
+    funcionaro = request.json
 
     mycursor = mydb.cursor()
 
-    lookq = funcionario['cartao']
+    sql = f"INSERT INTO Olimpiada (cartao,name,Lider,Empresa) VALUES({funcionaro['cartao']},'{funcionaro['name']}','{funcionaro['lider']}','{funcionaro['empresa']}');"
+    mycursor.execute(sql)
 
-    # verif = f"SELECT * FROM Olimpiada WHERE cartao = {funcionario['cartao']}"
-    # mycursor.execute(verif)
-
-    mycursor.execute("DELETE FROM Olimpiada WHERE cartao = %s", [lookq])
     mydb.commit()
-    print("Linha deletada com sucesso!")
+
+    return make_response(
+        jsonify(
+            masage='Funcionario cadastrado',
+            operator=funcionaro
+        )
+    )
 
 
 if __name__ == '__main__':
